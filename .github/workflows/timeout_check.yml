@@ -1,0 +1,24 @@
+name: Timeout Check
+
+on:
+  push:
+    branches:
+      - "*"  # Or whichever branch you want this action to trigger on.
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run script with timeout
+        run: |
+          (./sleep_for_1_hour.sh) & pid=$!
+          sleep 1m
+          if kill -0 $pid 2>/dev/null; then
+            echo "timeout"
+            kill $pid
+          fi
+        timeout-minutes: 2  # To ensure the GitHub action itself doesn't run indefinitely
