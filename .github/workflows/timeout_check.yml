@@ -15,6 +15,7 @@ jobs:
 
       - name: Run script with timeout
         run: |
+          chmod +x sleep_for_1_hour.sh
           (./sleep_for_1_hour.sh) & pid=$!
           sleep 1m
           if kill -0 $pid 2>/dev/null; then
